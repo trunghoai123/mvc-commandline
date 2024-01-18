@@ -3,8 +3,6 @@ class ProductModel
 {
     function __construct()
     {
-        echo 'product model';
-        echo '<br>';
     }
 
     function getListData()

@@ -7,7 +7,6 @@ class Product extends Controller
     {
         $this->model = $this->loadModel('ProductModel');
     }
-
     function index()
     {
         if (!empty($this->model)) {
@@ -24,7 +23,14 @@ class Product extends Controller
     {
         if (!empty($this->model)) {
             $data = $this->model->getDetail($id);
-            $this->loadView('products/detail', ['detail' => $data]);
+            $this->loadView(
+                'layouts/client_layout',
+                [
+                    'page' => 'products/detail',
+                    'pageTitle' => 'Detail Product',
+                    'data' => ['detail' => $data],
+                ]
+            );
         } else {
             echo 'model not found';
         }
@@ -33,7 +39,16 @@ class Product extends Controller
     {
         if (!empty($this->model)) {
             $data = $this->model->getListData();
-            $this->loadView('products/list',  ['products' => $data]);
+            $this->loadView(
+                'layouts/client_layout',
+                [
+                    'page' => 'products/list',
+                    'pageTitle' => 'List Product',
+                    'data' => [ // use for sub view
+                        'products' => $data
+                    ],
+                ]
+            );
         } else {
             echo 'model not found';
         }

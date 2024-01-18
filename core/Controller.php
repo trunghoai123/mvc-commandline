@@ -4,8 +4,6 @@ class Controller
 {
     function __construct()
     {
-        echo 'controller';
-        echo '<br>';
     }
 
     function loadModel($model)
@@ -22,7 +20,7 @@ class Controller
     function loadView($view, $data = [])
     {
         if (file_exists(DIR_ROOT . '/app/views/' . $view  . '.php')) {
-            extract($data);
+            extract($data); // using $data or keys of $data
             require_once(DIR_ROOT . '/app/views/' . $view . '.php');
             return true;
         } else {

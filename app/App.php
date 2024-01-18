@@ -7,9 +7,11 @@ class App
     private $controller;
     private $action;
     private $params;
+    private $route;
     function __construct()
     {
         global $routes;
+        $this->route = new Route();
         if (!empty($routes['default_controller'])) {
             $this->controller = $routes['default_controller'];
         } else {
@@ -33,15 +35,39 @@ class App
     function processURl()
     {
         $url = $this->getUrl();
-        $extractedUrl = array_values(array_filter(explode('/', $url)));
-        if (!empty($extractedUrl[0])) {
-            $this->controller = ucfirst($extractedUrl[0]);
+        if (!empty($this->route)) {
+            $url = $this->route->handleRoute($url);
         }
-        if (file_exists('app/controllers/' . $this->controller . '.php')) {
-            require_once('app/controllers/' . $this->controller . '.php');
+        $extractedUrl = array_values(array_filter(explode('/', $url)));
+        $pathCheck = '';
+        if (!empty($extractedUrl)) {
+            foreach ($extractedUrl as $key => $item) {
+                $pathCheck .= $item . '/';
+                $name = rtrim($pathCheck, '/');
+                $name = explode('/', $name);
+                $name[count($name) - 1] = ucfirst($name[count($name) - 1]);
+                $name = implode('/', $name);
+                if (file_exists('app/controllers/' . $name . '.php')) {
+                    $pathCheck = $name; //admin/dashboard | admin/dashboard/index | dashboard/index
+                    break;
+                } else {
+                    unset($extractedUrl[$key]);
+                }
+            }
+            $extractedUrl = array_values($extractedUrl);
+        }
+
+        if (!empty($extractedUrl[0])) { // asign class name
+            $this->controller = ucfirst($extractedUrl[0]);
+        } else {
+            $this->controller = ucfirst($this->controller); // default controller
+        }
+        if (file_exists('app/controllers/' . $pathCheck . '.php')) {
+            require_once('app/controllers/' . $pathCheck . '.php');
             if (class_exists($this->controller)) {
                 // $this->controller = new $this->controller();
                 unset($extractedUrl[0]);
+                $extractedUrl = array_values($extractedUrl);
             } else {
                 $this->renderError(404);
                 return;
@@ -50,12 +76,12 @@ class App
             $this->renderError(404);
             return;
         }
-        if (!empty($extractedUrl[1])) {
-            $this->action = $extractedUrl[1];
+        if (!empty($extractedUrl[0])) {
+            $this->action = $extractedUrl[0];
         }
         if (method_exists($this->controller, $this->action)) {
             // $this->controller->{$this->action}();
-            unset($extractedUrl[1]);
+            unset($extractedUrl[0]);
         } else {
             $this->renderError(404);
             return;
