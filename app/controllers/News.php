@@ -6,7 +6,6 @@ class News extends Controller
     {
         echo 'News index';
     }
-
     public function category($id)
     {
         echo 'News category ' . $id;

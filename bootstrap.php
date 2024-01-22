@@ -15,7 +15,39 @@ define(
     '_WEB_ROOT',
     $webRoot
 );
-require_once('configs/routes.php');
+
+$configDirs = scandir('configs');
+
+if (!empty($configDirs)) {
+    foreach ($configDirs as $configDir) {
+        if ($configDir != '.' && $configDir != '..' && file_exists('configs/' . $configDir)) {
+            require_once('configs/' . $configDir);
+        }
+    }
+}
+
+
+
 require_once('core/Route.php');
 require_once('app/App.php');
+
+if (!empty($config['database'])) {
+    $db_config = ($config['database']);
+
+    if (!empty($db_config)) {
+        require_once('core/Connection.php');
+        require_once('core/Database.php');
+        // new Connection($db_config);
+        // $conn = Connection::getInstance($db_config);
+        // $db = new Database();
+
+        // $rs = $db->query1();
+        // $rs = $db->query('SELECT * FROM php_mvc.username')->fetchAll(PDO::FETCH_ASSOC);
+        // echo '<pre>';
+        // print_r($rs);
+        // echo '</pre>';
+    }
+}
+require_once('core/Model.php');
+
 require_once('core/Controller.php');

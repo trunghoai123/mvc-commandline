@@ -5,7 +5,6 @@ class Home extends Controller
     private $model;
     function __construct()
     {
-        echo 'home controller';
         $this->model = $this->loadModel('HomeModel');
     }
 

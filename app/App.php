@@ -1,7 +1,5 @@
 <?php
 
-use function PHPUnit\Framework\isEmpty;
-
 class App
 {
     private $controller;
@@ -10,14 +8,13 @@ class App
     private $route;
     function __construct()
     {
-        global $routes;
+        global $routes, $config;
         $this->route = new Route();
         if (!empty($routes['default_controller'])) {
             $this->controller = $routes['default_controller'];
         } else {
             $this->controller = 'Home';
         }
-
         $this->action = 'index';
         $this->params = [];
         $this->processURl();
@@ -61,6 +58,7 @@ class App
             $this->controller = ucfirst($extractedUrl[0]);
         } else {
             $this->controller = ucfirst($this->controller); // default controller
+            $pathCheck = $this->controller;
         }
         if (file_exists('app/controllers/' . $pathCheck . '.php')) {
             require_once('app/controllers/' . $pathCheck . '.php');
@@ -86,9 +84,7 @@ class App
             $this->renderError(404);
             return;
         }
-
         $this->params = $extractedUrl ? array_values($extractedUrl) : [];
-
         call_user_func_array([new $this->controller(), $this->action], $this->params);
     }
 
