@@ -6,12 +6,10 @@ class ProductModel extends Model
     {
         parent::__construct();
     }
-
     function tableFill()
     {
         return $this->table;
     }
-
     function fieldFill()
     {
         return 'id, name'; // or '*'
@@ -19,6 +17,10 @@ class ProductModel extends Model
     function getListData()
     {
         return $this->db->query('SELECT * FROM ' . $this->table)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    function getList()
+    {
+        return $this->db->table($this->table)->select('id')->where('id', '>=', 1)->execute();
     }
     function getDetail($id)
     {

@@ -10,7 +10,9 @@ class Product extends Controller
     function index()
     {
         if (!empty($this->model)) {
-            $data = $this->model->get();
+            // $data = $this->model->get();
+            // $data = $this->model->getListData();
+            $data = $this->model->getList();
             echo '<pre>';
             print_r($data);
             echo '</pre>';
@@ -29,17 +31,6 @@ class Product extends Controller
             echo 'model not found';
         }
     }
-    // function index()
-    // {
-    //     if (!empty($this->model)) {
-    //         $data = $this->model->getListData();
-    //         echo '<pre>';
-    //         print_r($data);
-    //         echo '</pre>';
-    //     } else {
-    //         echo 'model not found';
-    //     }
-    // }
     function detail($id = '0')
     {
         if (!empty($this->model)) {
