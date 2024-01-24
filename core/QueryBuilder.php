@@ -7,6 +7,7 @@ trait QueryBuilder
    private $where = '';
    private $limit = '';
    private $orderBy = '';
+   private $join = '';
 
    private function table($table)
    {
@@ -34,7 +35,7 @@ trait QueryBuilder
 
    private function execute($fetch = 'fetchAll' /* fetchAll | fetch */)
    {
-      $sql = "SELECT $this->select FROM $this->table $this->where";
+      $sql = "SELECT $this->select FROM $this->table $this->join $this->where $this->limit";
       $query = $this->__conn->query($sql);
       $this->table = '';
       $this->where = '';
@@ -60,14 +61,13 @@ trait QueryBuilder
       // } else {
       //    $this->orderBy = "ORDERBY $column $sort";
       // }
-
       $this->orderBy = "ORDERBY $column";
       return $this;
    }
 
-   private function join()
+   private function join($joinedTable, $relationship, $joinType)
    {
-
+      $this->join .= "$joinType $joinedTable ON $relationship";
       return $this;
    }
 }

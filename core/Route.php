@@ -4,7 +4,6 @@ class Route
     public function __construct()
     {
     }
-
     function handleRoute($url)
     {
         global $routes;

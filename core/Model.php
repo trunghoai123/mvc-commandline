@@ -7,7 +7,6 @@ abstract class Model extends Database
     {
         $this->db = new Database();
     }
-
     abstract function tableFill();
     abstract function fieldFill();
     function get()

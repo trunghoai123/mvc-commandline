@@ -20,7 +20,10 @@ class ProductModel extends Model
     }
     function getList()
     {
-        return $this->db->table($this->table)->select('id')->where('id', '>=', 1)->execute();
+        return $this->db->table($this->table)->join('product', 'username.productId=product.id')->execute();
+        // return $this->db->table($this->table)->select('id')->where('id', '>=', 1)
+        //     ->where('id', '<', 5, 'AND')->limit(4)->execute();
+        // return $this->db->table($this->table)->select('id')->where('id', '>=', 1)->execute();
     }
     function getDetail($id)
     {
