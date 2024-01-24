@@ -1,7 +1,7 @@
 <?php
 class ProductModel extends Model
 {
-    private $table = DB_NAME . '.username';
+    private $table = 'users';
     function __construct()
     {
         parent::__construct();
@@ -20,10 +20,12 @@ class ProductModel extends Model
     }
     function getList()
     {
-        return $this->db->table($this->table)->join('product', 'username.productId=product.id')->execute();
+        // return $this->db->table($this->table)->join('product', 'username.productId=product.id')->execute();
         // return $this->db->table($this->table)->select('id')->where('id', '>=', 1)
         //     ->where('id', '<', 5, 'AND')->limit(4)->execute();
-        // return $this->db->table($this->table)->select('id')->where('id', '>=', 1)->execute();
+        return $this->db->table($this->table)->select('*')
+            ->where('name', 'like', '%')->where('id', '>=', 1, 'OR')
+            ->limit(100)->orderBy('id asc')->join('invoices', 'invoices.user_id=users.id', 'inner join')->execute();
     }
     function getDetail($id)
     {

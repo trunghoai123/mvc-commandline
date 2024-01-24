@@ -1,7 +1,6 @@
 <?php
 abstract class Model extends Database
 {
-    use QueryBuilder; // table - select - where - execute
     protected $db;
     protected function __construct()
     {

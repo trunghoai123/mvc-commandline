@@ -36,6 +36,7 @@ if (!empty($config['database'])) {
 
     if (!empty($db_config)) {
         require_once('core/Connection.php');
+        require_once('core/QueryBuilder.php');
         require_once('core/Database.php');
         // new Connection($db_config);
         // $conn = Connection::getInstance($db_config);

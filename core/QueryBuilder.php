@@ -9,19 +9,19 @@ trait QueryBuilder
    private $orderBy = '';
    private $join = '';
 
-   private function table($table)
+   protected function table($table)
    {
       $this->table = $table;
       return $this;
    }
 
-   private function select($select = '*')
+   protected function select($select = '*')
    {
       $this->select = $select;
       return $this;
    }
 
-   private function where($column, $condition, $value, $logicalOperator = 'AND')
+   protected function where($column, $condition, $value, $logicalOperator = 'AND')
    {
       $prefix = '';
       if (empty($this->where)) {
@@ -33,27 +33,28 @@ trait QueryBuilder
       return $this;
    }
 
-   private function execute($fetch = 'fetchAll' /* fetchAll | fetch */)
+   protected function execute($fetch = 'fetchAll' /* fetchAll | fetch */)
    {
-      $sql = "SELECT $this->select FROM $this->table $this->join $this->where $this->limit";
+      $sql = "SELECT $this->select FROM $this->table $this->join $this->where $this->orderBy $this->limit";
+      echo $sql;
       $query = $this->__conn->query($sql);
       $this->table = '';
       $this->where = '';
       $this->select = '';
       $this->limit = '';
       if (!empty($query)) {
-         return $query->$fetch();
+         return $query->$fetch(PDO::FETCH_ASSOC);
       }
       return false;
    }
 
-   private function limit($count, $offset = 0)
+   protected function limit($count, $offset = 0)
    {
       $this->limit = "LIMIT $offset, $count";
       return $this;
    }
 
-   private function orderBy($column, $sort = 'ASC')
+   protected function orderBy($column,/* $sort = 'ASC'*/)
    {
       // $columns = array_filter(explode(',', $column));
       // if (!empty($columns) && count($columns) > 2) {
@@ -61,11 +62,11 @@ trait QueryBuilder
       // } else {
       //    $this->orderBy = "ORDERBY $column $sort";
       // }
-      $this->orderBy = "ORDERBY $column";
+      $this->orderBy = "ORDER BY $column";
       return $this;
    }
 
-   private function join($joinedTable, $relationship, $joinType)
+   protected function join($joinedTable, $relationship, $joinType)
    {
       $this->join .= "$joinType $joinedTable ON $relationship";
       return $this;

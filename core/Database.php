@@ -3,6 +3,7 @@
 
 class Database
 {
+    use QueryBuilder; // table - select - where - execute
     private  $__conn;
     public function __construct()
     {
