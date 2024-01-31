@@ -18,6 +18,26 @@ class ProductModel extends Model
     {
         return $this->db->query('SELECT * FROM ' . $this->table)->fetchAll(PDO::FETCH_ASSOC);
     }
+    function addNewUser()
+    {
+        return $this->db->table($this->table)->insert([
+            'id' => 12,
+            'name' => 'inserted user',
+            'password' => '1233210',
+        ]);
+    }
+    function updateUser()
+    {
+        return $this->db->table($this->table)->update([
+            'id' => 12,
+            'name' => 'udated user ',
+            'password' => '0',
+        ], 'id', '=', 12);
+    }
+    function deleteUser()
+    {
+        return $this->db->table($this->table)->delete('id', '=', 12);
+    }
     function getList()
     {
         // return $this->db->table($this->table)->join('product', 'username.productId=product.id')->execute();

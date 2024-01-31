@@ -26,8 +26,6 @@ if (!empty($configDirs)) {
     }
 }
 
-
-
 require_once('core/Route.php');
 require_once('app/App.php');
 
@@ -38,6 +36,7 @@ if (!empty($config['database'])) {
         require_once('core/Connection.php');
         require_once('core/QueryBuilder.php');
         require_once('core/Database.php');
+        require_once('core/DB.php');
         // new Connection($db_config);
         // $conn = Connection::getInstance($db_config);
         // $db = new Database();
@@ -52,3 +51,5 @@ if (!empty($config['database'])) {
 require_once('core/Model.php');
 
 require_once('core/Controller.php');
+
+require_once('core/Request.php');

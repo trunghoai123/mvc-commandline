@@ -2,8 +2,10 @@
 
 class Controller
 {
+    public $db;
     function __construct()
     {
+        $this->db = new Database();
     }
 
     function loadModel($model)

@@ -6,6 +6,7 @@ class App
     private $action;
     private $params;
     private $route;
+    private $__db;
     function __construct()
     {
         global $routes, $config;
@@ -17,6 +18,9 @@ class App
         }
         $this->action = 'index';
         $this->params = [];
+
+        $this->__db = (new DB())->db;
+        // var_dump($this->__db);
         $this->processURl();
     }
     function getUrl()
@@ -63,9 +67,10 @@ class App
         if (file_exists('app/controllers/' . $pathCheck . '.php')) {
             require_once('app/controllers/' . $pathCheck . '.php');
             if (class_exists($this->controller)) {
-                // $this->controller = new $this->controller();
+                $this->controller = new $this->controller();
                 unset($extractedUrl[0]);
                 $extractedUrl = array_values($extractedUrl);
+                $this->controller->db = $this->__db;
             } else {
                 $this->renderError(404);
                 return;
@@ -85,7 +90,7 @@ class App
             return;
         }
         $this->params = $extractedUrl ? array_values($extractedUrl) : [];
-        call_user_func_array([new $this->controller(), $this->action], $this->params);
+        call_user_func_array([$this->controller, $this->action], $this->params);
     }
 
     function renderError($statusCode)

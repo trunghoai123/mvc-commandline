@@ -5,6 +5,7 @@ class Product extends Controller
     private $model;
     function __construct()
     {
+        parent::__construct();
         $this->model = $this->loadModel('ProductModel');
     }
     function index()
@@ -12,9 +13,18 @@ class Product extends Controller
         if (!empty($this->model)) {
             // $data = $this->model->get();
             // $data = $this->model->getListData();
-            $data = $this->model->getList();
+            // $data = $this->model->getList();
+            // $this->model->addNewUser();
+            // $this->model->updateUser();
+            // $this->model->deleteUser();
+            // global query builder
+            // $this->db->table('users')->insert([
+            //     'id' => random_int(1000, 5000),
+            //     'name' => 'inserted user',
+            //     'password' => '1233210',
+            // ]);
             echo '<pre>';
-            print_r($data);
+            // print_r($data);
             echo '</pre>';
         } else {
             echo 'model not found';

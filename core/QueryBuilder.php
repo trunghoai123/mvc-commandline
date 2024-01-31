@@ -9,19 +9,19 @@ trait QueryBuilder
    private $orderBy = '';
    private $join = '';
 
-   protected function table($table)
+   public function table($table)
    {
       $this->table = $table;
       return $this;
    }
 
-   protected function select($select = '*')
+   public function select($select = '*')
    {
       $this->select = $select;
       return $this;
    }
 
-   protected function where($column, $condition, $value, $logicalOperator = 'AND')
+   public function where($column, $condition, $value, $logicalOperator = 'AND')
    {
       $prefix = '';
       if (empty($this->where)) {
@@ -33,10 +33,9 @@ trait QueryBuilder
       return $this;
    }
 
-   protected function execute($fetch = 'fetchAll' /* fetchAll | fetch */)
+   public function execute($fetch = 'fetchAll' /* fetchAll | fetch */)
    {
       $sql = "SELECT $this->select FROM $this->table $this->join $this->where $this->orderBy $this->limit";
-      echo $sql;
       $query = $this->__conn->query($sql);
       $this->table = '';
       $this->where = '';
@@ -48,13 +47,45 @@ trait QueryBuilder
       return false;
    }
 
-   protected function limit($count, $offset = 0)
+   public function insert($data)
+   {
+      if (!empty($data)) {
+         $this->insertData($this->table, $data);
+      }
+   }
+
+   public function update($data, $field = '', $condition = '', $value = '')
+   {
+      if (!empty($data)) {
+         $cond = '';
+         if (!empty($field) && !empty($condition) && !empty($value)) {
+            $this->where($field, $condition, $value);
+            $cond = str_replace('WHERE', '', $this->where);
+            $cond = trim($cond);
+         }
+         return $this->updateData($this->table, $data, $cond);
+      }
+      return false;
+   }
+
+   public function delete($field = '', $condition = '', $value = '')
+   {
+      $cond = '';
+      if (!empty($field) && !empty($condition) && !empty($value)) {
+         $this->where($field, $condition, $value);
+         $cond = str_replace('WHERE', '', $this->where);
+         $cond = trim($cond);
+      }
+      return $this->deleteData($this->table, $cond);
+   }
+
+   public function limit($count, $offset = 0)
    {
       $this->limit = "LIMIT $offset, $count";
       return $this;
    }
 
-   protected function orderBy($column,/* $sort = 'ASC'*/)
+   public function orderBy($column,/* $sort = 'ASC'*/)
    {
       // $columns = array_filter(explode(',', $column));
       // if (!empty($columns) && count($columns) > 2) {
@@ -66,7 +97,7 @@ trait QueryBuilder
       return $this;
    }
 
-   protected function join($joinedTable, $relationship, $joinType)
+   public function join($joinedTable, $relationship, $joinType)
    {
       $this->join .= "$joinType $joinedTable ON $relationship";
       return $this;

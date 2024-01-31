@@ -6,7 +6,3 @@ $config['database'] = [
     'password' => '',
     'database' => 'php_mvc',
 ];
-define(
-    'DB_NAME',
-    'php_mvc'
-);

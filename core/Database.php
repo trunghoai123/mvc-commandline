@@ -5,15 +5,16 @@ class Database
 {
     use QueryBuilder; // table - select - where - execute
     private  $__conn;
+
     public function __construct()
     {
         global $db_config;
         $this->__conn = Connection::getInstance($db_config);
     }
 
-    function insert($table, $data)
+    function insertData($table, $data)
     {
-        if (!empty($this->$data)) {
+        if (!empty($data)) {
             $fieldString = '';
             $valueString = '';
             foreach ($data as $key => $value) {
@@ -27,7 +28,7 @@ class Database
         }
     }
 
-    function update($table, $data, $condition = '')
+    function updateData($table, $data, $condition = '')
     {
         if (!empty($data)) {
             $updateStr = '';
@@ -48,7 +49,7 @@ class Database
         }
     }
 
-    function delete($table, $condition = '')
+    function deleteData($table, $condition = '')
     {
         if (!empty($condition)) {
             $sql = "DELETE FROM $table WHERE $condition";
